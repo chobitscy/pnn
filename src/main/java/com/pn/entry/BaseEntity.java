@@ -46,7 +46,7 @@ public class BaseEntity implements Serializable {
 
     @ApiModelProperty("业务状态")
     private Integer state;
-
-    @ApiModelProperty("是否已删除")
-    private Integer isDeleted;
+//
+//    @ApiModelProperty("是否已删除")
+//    private Integer isDeleted;
 }

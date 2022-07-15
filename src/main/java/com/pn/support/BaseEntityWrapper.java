@@ -1,4 +1,4 @@
-package com.pn.wrapper;
+package com.pn.support;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -19,7 +19,7 @@ public abstract class BaseEntityWrapper<E, V> {
 
     public IPage<V> pageVO(IPage<E> pages) {
         List<V> records = this.listVO(pages.getRecords());
-        IPage<V> pageVo = new Page(pages.getCurrent(), pages.getSize(), pages.getTotal());
+        IPage<V> pageVo = new Page<>(pages.getCurrent(), pages.getSize(), pages.getTotal());
         pageVo.setRecords(records);
         return pageVo;
     }

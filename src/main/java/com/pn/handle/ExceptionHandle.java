@@ -1,9 +1,9 @@
-package com.example.hope.config.exception;
+package com.pn.handle;
 
-import com.example.hope.common.utils.ReturnMessageUtil;
-import com.example.hope.model.entity.ReturnMessage;
+import com.pn.support.BusinessException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -12,21 +12,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionHandle {
 
     @ExceptionHandler(value = Exception.class)
-    public ReturnMessage<Object> handle(Exception exception) {
-        // 业务异常 code:0
-        if (exception instanceof BusinessException) {
-            log.error(exception.getMessage());
-            return ReturnMessageUtil.error(0, exception.getMessage());
-        }
-        // 唯一性约束
-        if (exception instanceof DuplicateKeyException) {
-            log.error(exception.getMessage());
-            return ReturnMessageUtil.error(0, "数据已经存在");
-        }
+    public ResponseEntity<Object> handle(Exception exception) {
 
         log.error(exception.getMessage());
 
-        // 系统异常 code:-1
-        return ReturnMessageUtil.error(-1, "系统异常");
+        if (exception instanceof BusinessException) {
+            return ResponseEntity.status(500).body(exception.getMessage());
+        }
+
+        // 唯一性约束
+        if (exception instanceof DuplicateKeyException) {
+            return ResponseEntity.status(500).body("数据已经存在");
+        }
+        return ResponseEntity.status(500).body("系统异常");
     }
 }

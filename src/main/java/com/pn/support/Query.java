@@ -3,13 +3,13 @@
 // (powered by Fernflower decompiler)
 //
 
-package com.pn.bo;
+package com.pn.support;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(
-    description = "查询条件"
+        description = "查询条件"
 )
 public class Query {
     @ApiModelProperty("当前页")
@@ -17,11 +17,11 @@ public class Query {
     @ApiModelProperty("每页的数量")
     private Integer size;
     @ApiModelProperty(
-        hidden = true
+            hidden = true
     )
     private String ascs;
     @ApiModelProperty(
-        hidden = true
+            hidden = true
     )
     private String descs;
 

@@ -1,10 +1,10 @@
-package com.example.hope.config.interceptor;
+package com.pn.interceptor;
 
-import com.example.hope.annotation.Admin;
-import com.example.hope.annotation.PassToken;
-import com.example.hope.annotation.LoginUser;
-import com.example.hope.common.utils.JwtUtils;
-import com.example.hope.config.exception.BusinessException;
+import com.pn.annotation.Admin;
+import com.pn.annotation.LoginUser;
+import com.pn.annotation.PassToken;
+import com.pn.support.BusinessException;
+import com.pn.utils.JwtUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,7 +34,7 @@ public class Authentication implements HandlerInterceptor {
         if (method.isAnnotationPresent(LoginUser.class)) {
 
             if (token == null) {
-                throw new BusinessException(0, "无token,请重新登陆");
+                throw new BusinessException("无token,请重新登陆");
             }
 
             JwtUtils.parseJWT(token);
@@ -45,11 +45,11 @@ public class Authentication implements HandlerInterceptor {
         if (method.isAnnotationPresent(Admin.class)) {
 
             if (token == null) {
-                throw new BusinessException(0, "无token,请重新登陆");
+                throw new BusinessException("无token,请重新登陆");
             }
 
             if (!JwtUtils.is_admin(token)) {
-                throw new BusinessException(0, "权限不够");
+                throw new BusinessException("权限不够");
             }
 
             JwtUtils.parseJWT(token);

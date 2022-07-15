@@ -1,7 +1,7 @@
-package com.example.hope.common.utils;
+package com.pn.utils;
 
-import com.example.hope.config.exception.BusinessException;
-import com.example.hope.model.entity.User;
+import com.pn.entry.User;
+import com.pn.support.BusinessException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -42,14 +42,10 @@ public class JwtUtils {
             // 添加构成JWT的参数
             JwtBuilder jwtBuilder = Jwts.builder().setHeaderParam("type", "JWT")
                     .claim("userId", user.getId())
-                    .claim("phone", user.getPhone())
-                    .claim("address", user.getAddress())
-                    .claim("admin", user.isAdmin())
-                    .claim("score", user.getScore())
                     .claim("name", user.getName())
                     .claim("email", user.getEmail())
-                    .setSubject(user.getPhone())// 代表这个JWT的主体，即它的所有人
-                    .setAudience(user.getPhone())// 代表这个JWT的接收对象；
+                    .setSubject(user.getEmail())// 代表这个JWT的主体，即它的所有人
+                    .setAudience(user.getEmail())// 代表这个JWT的接收对象；
                     .setIssuedAt(now)// 是一个时间戳，代表这个JWT的签发时间；
                     .signWith(signatureAlgorithm, signingKey);
 
@@ -115,14 +111,13 @@ public class JwtUtils {
      */
     public static Claims parseJWT(String token) {
         try {
-            Claims claims = Jwts.parser()
+            return Jwts.parser()
                     .setSigningKey(DatatypeConverter.parseBase64Binary(key))
                     .parseClaimsJws(token).getBody();
-            return claims;
         } catch (ExpiredJwtException eje) {
-            throw new BusinessException(0, "token过期");
+            throw new BusinessException("token过期");
         } catch (Exception e) {
-            throw new BusinessException(0, "token解析异常");
+            throw new BusinessException("token解析异常");
         }
     }
 }

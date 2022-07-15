@@ -1,11 +1,8 @@
-mybatis:
-  type-aliases-package: com.pn.entry
-  mapper-locations: com.pn.mapper.*.xml
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: ${dbPasswd}
-    url: jdbc:mysql://${dbHost}:3306/${dbName}?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
+    url: jdbc:mysql://${dbHost}:${dbPort}/${dbName}?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
     username: ${dbUser}
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -73,3 +70,8 @@ server:
       max: 100
 jwt:
   key: ${key}
+user:
+  register: ${register}
+logging:
+  level:
+    com.pn: debug

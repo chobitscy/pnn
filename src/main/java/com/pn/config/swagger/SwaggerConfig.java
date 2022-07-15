@@ -1,4 +1,4 @@
-package com.pn.config.cors.swagger;
+package com.pn.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

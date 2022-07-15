@@ -1,9 +1,19 @@
 package com.pn.handle;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.core.MethodParameter;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 @RestControllerAdvice
-public class ResponseBodyAdvice implements ResponseAdvice<Object> {
+public class ResponseBodyHandle implements ResponseBodyAdvice<Object> {
 
     //判断是否要执行beforeBodyWrite方法，true为执行，false不执行
     @Override
@@ -13,36 +23,48 @@ public class ResponseBodyAdvice implements ResponseAdvice<Object> {
 
     //对response处理的执行方法
     @Override
-    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        // 这里面参数很多，一般使用如下几个：
-        // body 返回的内容 request 请求 response 响应
+    public Object beforeBodyWrite(Object body,
+                                  MethodParameter returnType,
+                                  MediaType selectedContentType,
+                                  Class<? extends HttpMessageConverter<?>> selectedConverterType,
+                                  ServerHttpRequest request, ServerHttpResponse response) {
+        if (((ServletServerHttpResponse) response).getServletResponse().getStatus() != 200) {
+            return Response.createResponse(null, "操作失败", 0);
+        }
         return Response.createResponse(body);
     }
 
     @Data
     @Builder
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     @AllArgsConstructor
     public static class Response<T> {
-        private final String code;
+        private Integer code;
         private String message;
         private T data;
 
         private Response() {
-            this.code = "success";
+            this.code = 1;
         }
 
         private Response(T data) {
             this();
             this.data = data;
+            this.message = "操作成功";
+        }
+
+        private Response(T data, String message, Integer code) {
+            this.code = code;
+            this.data = data;
+            this.message = message;
         }
 
         public static <T> Response<T> createResponse(T data) {
             return new Response<>(data);
         }
 
+        public static <T> Response<T> createResponse(T data, String message, Integer code) {
+            return new Response<>(data, message, code);
+        }
+
     }
 }
-————————————————
-版权声明：本文为CSDN博主「搏·梦」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/xueyijin/article/details/122524335
