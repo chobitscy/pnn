@@ -1,7 +1,8 @@
 package com.pn.utils;
 
 import com.pn.entry.User;
-import com.pn.support.BusinessException;
+import com.pn.enums.ResponseCode;
+import com.pn.support.BaseException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,7 @@ public class JwtUtils {
                     .claim("userId", user.getId())
                     .claim("name", user.getName())
                     .claim("email", user.getEmail())
+                    .claim("admin", user.getAdmin())
                     .setSubject(user.getEmail())// 代表这个JWT的主体，即它的所有人
                     .setAudience(user.getEmail())// 代表这个JWT的接收对象；
                     .setIssuedAt(now)// 是一个时间戳，代表这个JWT的签发时间；
@@ -70,7 +72,7 @@ public class JwtUtils {
      * @return userId
      */
     public static long getUserId(String token) {
-        return parseJWT(token).get("userId", Integer.class);
+        return parseJWT(token).get("userId", Long.class);
     }
 
     /**
@@ -115,9 +117,9 @@ public class JwtUtils {
                     .setSigningKey(DatatypeConverter.parseBase64Binary(key))
                     .parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException eje) {
-            throw new BusinessException("token过期");
+            throw new BaseException(ResponseCode.SERVICE_ERROR, "token过期");
         } catch (Exception e) {
-            throw new BusinessException("token解析异常");
+            throw new BaseException(ResponseCode.SERVICE_ERROR, "token解析异常");
         }
     }
 }

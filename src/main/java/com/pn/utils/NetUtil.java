@@ -5,9 +5,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * @Description 网络工具类
- * @Author chobit
- * @Data 2022/7/15 16:55
+ * 网络工具类
  **/
 public class NetUtil {
 
@@ -18,7 +16,7 @@ public class NetUtil {
      *
      */
     public static String getIpAddr(HttpServletRequest request) {
-        String ipAddress = null;
+        String ipAddress;
         try {
             ipAddress = request.getHeader("x-forwarded-for");
             if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {

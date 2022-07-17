@@ -1,4 +1,6 @@
 package com.pn.support.validate;
 
-public interface ExpireValidationGroup {
+import javax.validation.groups.Default;
+
+public interface ExpireValidationGroup extends Default {
 }

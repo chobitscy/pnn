@@ -1,8 +1,12 @@
 package com.pn.handle;
 
+import com.pn.annotation.BaseResponse;
+import com.pn.enums.ResponseCode;
+import com.pn.support.ResponseResult;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -12,59 +16,30 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-@RestControllerAdvice
+@RestControllerAdvice(annotations = BaseResponse.class)
+@Slf4j
 public class ResponseBodyHandle implements ResponseBodyAdvice<Object> {
 
-    //判断是否要执行beforeBodyWrite方法，true为执行，false不执行
     @Override
-    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public boolean supports(MethodParameter returnType, Class converterType) {
+        log.info("returnType:" + returnType);
+        log.info("converterType:" + converterType);
         return true;
     }
 
-    //对response处理的执行方法
     @Override
-    public Object beforeBodyWrite(Object body,
-                                  MethodParameter returnType,
-                                  MediaType selectedContentType,
-                                  Class<? extends HttpMessageConverter<?>> selectedConverterType,
-                                  ServerHttpRequest request, ServerHttpResponse response) {
-        if (((ServletServerHttpResponse) response).getServletResponse().getStatus() != 200) {
-            return Response.createResponse(null, "操作失败", 0);
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
+                                  Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        // 判断响应的Content-Type为JSON格式的body
+        if (MediaType.APPLICATION_JSON.equals(selectedContentType) || MediaType.APPLICATION_JSON_UTF8.equals(selectedContentType)) {
+            if (body instanceof ResponseResult) { // 如果响应返回的对象为统一响应体，则直接返回body
+                return body;
+            } else {
+                // 只有正常返回的结果才会进入这个判断流程，所以返回正常成功的状态码
+                return new ResponseResult(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getMsg(), body);
+            }
         }
-        return Response.createResponse(body);
-    }
-
-    @Data
-    @Builder
-    @AllArgsConstructor
-    public static class Response<T> {
-        private Integer code;
-        private String message;
-        private T data;
-
-        private Response() {
-            this.code = 1;
-        }
-
-        private Response(T data) {
-            this();
-            this.data = data;
-            this.message = "操作成功";
-        }
-
-        private Response(T data, String message, Integer code) {
-            this.code = code;
-            this.data = data;
-            this.message = message;
-        }
-
-        public static <T> Response<T> createResponse(T data) {
-            return new Response<>(data);
-        }
-
-        public static <T> Response<T> createResponse(T data, String message, Integer code) {
-            return new Response<>(data, message, code);
-        }
-
+        // 非JSON格式body直接返回即可
+        return body;
     }
 }

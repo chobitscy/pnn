@@ -7,14 +7,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * @Description 用户展示类
- * @Author chobit
- * @Data 2022/7/14 17:57
+ * 用户展示类
  **/
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
-@JsonIgnoreProperties({"password"})
+@JsonIgnoreProperties({"password", "admin"})
 public class UserVo extends User {
 
 }

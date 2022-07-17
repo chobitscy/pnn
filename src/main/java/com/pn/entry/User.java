@@ -1,18 +1,19 @@
 package com.pn.entry;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+
 /**
- * @Description 用户实体类
- * @Author chobit
- * @Data 2022/7/14 17:31
+ * 用户实体类
  **/
 
 @EqualsAndHashCode(callSuper = true)
@@ -20,6 +21,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @NoArgsConstructor
 @Valid
+@Accessors(chain = true)
 public class User extends BaseEntity {
 
     @NotEmpty(message = "邮箱不能为空")
@@ -27,17 +29,19 @@ public class User extends BaseEntity {
     @Email(message = "invalid email")
     private String email;
 
-    @NotEmpty(message = "名称不能为空")
     @ApiModelProperty(value = "名称")
     private String name;
 
     @ApiModelProperty(value = "头像")
     private String avatar;
 
-    @NotEmpty(message = "名称不能为空")
+    @NotEmpty(message = "密码不能为空")
     @ApiModelProperty(value = "密码")
     private String password;
 
     @ApiModelProperty(value = "ip")
     private String ip;
+
+    @ApiModelProperty(value = "管理员")
+    private Boolean admin;
 }

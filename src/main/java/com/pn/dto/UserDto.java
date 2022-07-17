@@ -12,9 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * @Description 用户传输类
- * @Author chobit
- * @Data 2022/7/14 17:57
+ * 用户传输类
  **/
 @EqualsAndHashCode(callSuper = true)
 @Data

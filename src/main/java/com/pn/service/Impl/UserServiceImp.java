@@ -1,20 +1,26 @@
 package com.pn.service.Impl;
 
-import cn.hutool.extra.cglib.CglibUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pn.dto.UserDto;
+import com.pn.entry.BaseEntity;
 import com.pn.entry.User;
+import com.pn.enums.ResponseCode;
 import com.pn.mapper.UserMapper;
 import com.pn.service.ServicePlus;
 import com.pn.service.UserService;
-import com.pn.support.BusinessException;
+import com.pn.support.BaseException;
+import com.pn.support.Condition;
+import com.pn.support.Query;
 import com.pn.utils.JwtUtils;
 import com.pn.utils.NetUtil;
 import com.pn.vo.UserVo;
 import com.pn.wrapper.UserWrapper;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description 用户服务实现类
- * @Author chobit
- * @Data 2022/7/14 17:51
+ * 用户服务实现类
  **/
 @Service
 public class UserServiceImp extends ServiceImpl<UserMapper, User> implements UserService, ServicePlus<User> {
@@ -36,26 +40,28 @@ public class UserServiceImp extends ServiceImpl<UserMapper, User> implements Use
     @Override
     public Map<String, Object> register(UserDto userDto, HttpServletRequest request) {
         if (!register) {
-            throw new BusinessException("关闭注册");
+            throw new BaseException(ResponseCode.SERVICE_ERROR, "关闭注册");
         }
         userDto.setPassword(DigestUtils.md5Hex(userDto.getPassword()));
         userDto.setIp(NetUtil.getIpAddr(request));
         boolean save = this.savePlus(userDto);
         if (!save) {
-            throw new BusinessException("注册失败");
+            throw new BaseException(ResponseCode.SERVICE_ERROR, "注册失败");
         } else {
             return buildUserInfo(userDto);
         }
     }
 
     @Override
-    public boolean remove(Long id) {
-        return false;
-    }
-
-    @Override
-    public boolean edit(UserDto userDto) {
-        return false;
+    public boolean edit(UserDto userDto, String token) {
+        String name = userDto.getName();
+        String avatar = userDto.getAvatar();
+        Long id = JwtUtils.getUserId(token);
+        Wrapper<User> wrapper = new LambdaUpdateWrapper<User>()
+                .set(name != null, User::getName, name)
+                .set(avatar != null, User::getAvatar, avatar)
+                .eq(BaseEntity::getId, id);
+        return this.update(wrapper);
     }
 
     @Override
@@ -70,9 +76,9 @@ public class UserServiceImp extends ServiceImpl<UserMapper, User> implements Use
                         .eq(User::getPassword, decodePW));
         User target = this.getOne(wrapper, false);
         if (target == null) {
-            throw new BusinessException("账户或密码错误");
+            throw new BaseException(ResponseCode.SERVICE_ERROR, "账户或密码错误");
         } else {
-            CglibUtil.copy(target, userDto);
+            BeanUtils.copyProperties(target, userDto);
             return buildUserInfo(userDto);
         }
     }
@@ -80,6 +86,12 @@ public class UserServiceImp extends ServiceImpl<UserMapper, User> implements Use
     @Override
     public UserVo selectById(Long id) {
         return UserWrapper.build().entityVO(this.getById(id));
+    }
+
+    @Override
+    public IPage<UserVo> selectByList(Query query) {
+        IPage<User> page = Condition.getPage(query);
+        return UserWrapper.build().pageVO(this.page(page));
     }
 
     /**

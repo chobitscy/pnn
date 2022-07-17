@@ -16,23 +16,25 @@ public class Condition {
         long current = query.getCurrent() == null ? 1 : query.getCurrent();
         long size = query.getSize() == null ? 10 : query.getSize();
         Page<T> page = new Page<T>(current, size);
-        String[] ascArr = query.getAscs().split(",");
-        String[] descArr = ascArr;
-        int var4 = ascArr.length;
+        if (query.getAscs() != null) {
+            String[] ascArr = query.getAscs().split(",");
+            String[] descArr = ascArr;
+            int var4 = ascArr.length;
 
-        int var5;
-        for (var5 = 0; var5 < var4; ++var5) {
-            String asc = descArr[var5];
-            page.addOrder(OrderItem.asc(cleanIdentifier(asc)));
-        }
+            int var5;
+            for (var5 = 0; var5 < var4; ++var5) {
+                String asc = descArr[var5];
+                page.addOrder(OrderItem.asc(cleanIdentifier(asc)));
+            }
 
-        descArr = query.getDescs().split(",");
-        String[] var8 = descArr;
-        var5 = descArr.length;
+            descArr = query.getDescs().split(",");
+            String[] var8 = descArr;
+            var5 = descArr.length;
 
-        for (int var9 = 0; var9 < var5; ++var9) {
-            String desc = var8[var9];
-            page.addOrder(OrderItem.desc(cleanIdentifier(desc)));
+            for (int var9 = 0; var9 < var5; ++var9) {
+                String desc = var8[var9];
+                page.addOrder(OrderItem.desc(cleanIdentifier(desc)));
+            }
         }
 
         return page;
