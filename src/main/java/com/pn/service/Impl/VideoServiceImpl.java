@@ -38,21 +38,24 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         IPage<Video> page = Condition.getPage(query);
         Wrapper<Video> wrapper = new LambdaQueryWrapper<Video>()
                 .isNotNull(Video::getCreateDate)
-                .between(Video::getPubDate, begin, now);
+                .between(Video::getPubDate, begin, now)
+                .orderByDesc(Video::getRate);
         return this.baseMapper.selectByPage(page, wrapper);
     }
 
     @Override
     public IPage<VideoVo> selectByPage(Query query) {
         IPage<Video> page = Condition.getPage(query);
-        return this.baseMapper.selectByPage(page, new QueryWrapper<>());
+        return this.baseMapper.selectByPage(page, new LambdaQueryWrapper<Video>()
+                .orderByDesc(Video::getRate));
     }
 
     @Override
     public IPage<VideoVo> search(Query query, String vid) {
         IPage<Video> page = Condition.getPage(query);
         return this.baseMapper.selectByPage(page, new LambdaQueryWrapper<Video>()
-                .like(vid != null, Video::getVid, vid));
+                .like(vid != null, Video::getVid, vid)
+                .orderByDesc(Video::getRate));
     }
 
     @Override

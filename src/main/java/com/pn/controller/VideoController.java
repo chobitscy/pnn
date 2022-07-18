@@ -71,6 +71,7 @@ public class VideoController {
         return videoService.score(videoDto);
     }
 
+    @LoginUser
     @GetMapping("/recommend/{id}")
     @ApiOperation("推荐")
     public IPage<VideoVo> recommend(Query query, @PathVariable Long id) {

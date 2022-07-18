@@ -4,6 +4,12 @@
 
     <resultMap id="videoToProduct" type="com.pn.vo.VideoVo">
         <result column="product_id" property="product.id"/>
+        <result column="name" property="product.name"/>
+        <result column="home" property="product.home"/>
+        <result column="avatar" property="product.avatar"/>
+        <result column="works" property="product.works"/>
+        <result column="fans" property="product.fans"/>
+        <result column="follow" property="product.follow"/>
         <result column="product_create_time" property="product.createTime"/>
         <result column="product_update_time" property="product.updateTime"/>
         <result column="product_state" property="product.state"/>
@@ -12,7 +18,7 @@
     <sql id="query">
         a.*,
         b.id AS product_id,
-        b.name AS name,
+        b.name AS 'name',
         b.home AS home,
         b.avatar AS avatar,
         b.works AS works,
@@ -51,5 +57,6 @@
             a.id != #{id}
             AND a.pid = #{pid}
             AND tid REGEXP #{exp}
+        ORDER BY rate DESC
     </select>
 </mapper>

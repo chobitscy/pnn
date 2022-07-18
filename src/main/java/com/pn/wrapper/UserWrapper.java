@@ -1,6 +1,5 @@
 package com.pn.wrapper;
 
-import cn.hutool.extra.cglib.CglibUtil;
 import com.pn.entry.User;
 import com.pn.support.BaseEntityWrapper;
 import com.pn.vo.UserVo;
