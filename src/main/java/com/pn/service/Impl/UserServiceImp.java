@@ -60,7 +60,8 @@ public class UserServiceImp extends ServiceImpl<UserMapper, User> implements Use
         Wrapper<User> wrapper = new LambdaUpdateWrapper<User>()
                 .set(name != null, User::getName, name)
                 .set(avatar != null, User::getAvatar, avatar)
-                .eq(BaseEntity::getId, id);
+                .eq(BaseEntity::getId, id)
+                .eq(BaseEntity::getState, 1);
         return this.update(wrapper);
     }
 
@@ -73,7 +74,8 @@ public class UserServiceImp extends ServiceImpl<UserMapper, User> implements Use
                         .eq(User::getPassword, decodePW))
                 .or(userDto.getName() != null, innerWrapper -> innerWrapper
                         .eq(User::getName, userDto.getName())
-                        .eq(User::getPassword, decodePW));
+                        .eq(User::getPassword, decodePW))
+                .eq(BaseEntity::getState, 1);
         User target = this.getOne(wrapper, false);
         if (target == null) {
             throw new BaseException(ResponseCode.SERVICE_ERROR, "账户或密码错误");
@@ -85,13 +87,24 @@ public class UserServiceImp extends ServiceImpl<UserMapper, User> implements Use
 
     @Override
     public UserVo selectById(Long id) {
-        return UserWrapper.build().entityVO(this.getById(id));
+        Wrapper<User> wrapper = new LambdaQueryWrapper<User>()
+                .eq(BaseEntity::getId, id)
+                .eq(BaseEntity::getState, 1);
+        return UserWrapper.build().entityVO(this.getOne(wrapper, false));
     }
 
     @Override
     public IPage<UserVo> selectByList(Query query) {
         IPage<User> page = Condition.getPage(query);
-        return UserWrapper.build().pageVO(this.page(page));
+        return UserWrapper.build().pageVO(this.page(page, new LambdaQueryWrapper<User>()
+                .eq(BaseEntity::getState, 1)));
+    }
+
+    @Override
+    public boolean close(Long id) {
+        return this.update(new LambdaUpdateWrapper<User>()
+                .set(BaseEntity::getState, 0)
+                .eq(BaseEntity::getId, id));
     }
 
     /**
