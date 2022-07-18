@@ -75,3 +75,4 @@ user:
 logging:
   level:
     com.pn: debug
+env: ${env}

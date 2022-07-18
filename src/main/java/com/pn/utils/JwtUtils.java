@@ -2,7 +2,7 @@ package com.pn.utils;
 
 import com.pn.entry.User;
 import com.pn.enums.ResponseCode;
-import com.pn.support.BaseException;
+import com.pn.support.exception.BaseException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

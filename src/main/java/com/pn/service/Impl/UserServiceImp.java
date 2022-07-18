@@ -3,6 +3,7 @@ package com.pn.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pn.dto.UserDto;
@@ -12,7 +13,7 @@ import com.pn.enums.ResponseCode;
 import com.pn.mapper.UserMapper;
 import com.pn.service.ServicePlus;
 import com.pn.service.UserService;
-import com.pn.support.BaseException;
+import com.pn.support.exception.BaseException;
 import com.pn.support.Condition;
 import com.pn.support.Query;
 import com.pn.utils.JwtUtils;
@@ -57,12 +58,12 @@ public class UserServiceImp extends ServiceImpl<UserMapper, User> implements Use
         String name = userDto.getName();
         String avatar = userDto.getAvatar();
         Long id = JwtUtils.getUserId(token);
-        Wrapper<User> wrapper = new LambdaUpdateWrapper<User>()
-                .set(name != null, User::getName, name)
-                .set(avatar != null, User::getAvatar, avatar)
-                .eq(BaseEntity::getId, id)
-                .eq(BaseEntity::getState, 1);
-        return this.update(wrapper);
+        UpdateWrapper<User> wrapper = new UpdateWrapper<User>()
+                .set(name != null, "name", name)
+                .set(avatar != null, "avatar", avatar)
+                .eq("id", id)
+                .eq("state", 1);
+        return this.updatePlus(wrapper);
     }
 
     @Override

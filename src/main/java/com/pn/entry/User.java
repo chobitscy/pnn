@@ -1,6 +1,8 @@
 package com.pn.entry;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.pn.support.validate.AddValidationGroup;
+import com.pn.support.validate.ExpireValidationGroup;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +26,7 @@ import javax.validation.constraints.NotEmpty;
 @Accessors(chain = true)
 public class User extends BaseEntity {
 
-    @NotEmpty(message = "邮箱不能为空")
+    @NotEmpty(message = "邮箱不能为空", groups = {ExpireValidationGroup.class})
     @ApiModelProperty(value = "邮箱")
     @Email(message = "invalid email")
     private String email;
@@ -35,7 +37,7 @@ public class User extends BaseEntity {
     @ApiModelProperty(value = "头像")
     private String avatar;
 
-    @NotEmpty(message = "密码不能为空")
+    @NotEmpty(message = "密码不能为空", groups = {ExpireValidationGroup.class})
     @ApiModelProperty(value = "密码")
     private String password;
 
