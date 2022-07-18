@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pn.mapper.VideoMapper">
+
+    <resultMap id="videoToProduct" type="com.pn.vo.VideoVo">
+        <result column="product_id" property="product.id"/>
+        <result column="product_create_time" property="product.createTime"/>
+        <result column="product_update_time" property="product.updateTime"/>
+        <result column="product_state" property="product.state"/>
+    </resultMap>
+
+    <sql id="query">
+        a.*,
+        b.id AS product_id,
+        b.name AS name,
+        b.home AS home,
+        b.avatar AS avatar,
+        b.works AS works,
+        b.fans AS fans,
+        b.follow AS follow,
+        b.create_time AS product_create_time,
+        b.update_time AS product_update_time,
+        b.state AS product_state
+    </sql>
+
+    <select id="selectByPage" resultMap="videoToProduct">
+        SELECT
+            <include refid="query"/>
+        FROM
+            video AS a
+            LEFT JOIN product AS b ON a.pid = b.id
+        ${ew.customSqlSegment}
+    </select>
+
+    <select id="selectByOne" resultMap="videoToProduct">
+        SELECT
+            <include refid="query"/>
+        FROM
+            video AS a
+            LEFT JOIN product AS b ON a.pid = b.id
+        ${ew.customSqlSegment}
+    </select>
+
+    <select id="recommend" resultMap="videoToProduct">
+        SELECT
+            <include refid="query"/>
+        FROM
+            video AS a
+            LEFT JOIN product AS b ON a.pid = b.id
+        WHERE
+            a.id != #{id}
+            AND a.pid = #{pid}
+            AND tid REGEXP #{exp}
+    </select>
+</mapper>

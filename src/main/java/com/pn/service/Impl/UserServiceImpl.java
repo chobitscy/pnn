@@ -33,7 +33,7 @@ import java.util.Map;
  * 用户服务实现类
  **/
 @Service
-public class UserServiceImp extends ServiceImpl<UserMapper, User> implements UserService, ServicePlus<User> {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService, ServicePlus<User> {
 
     @Value("${user.register:}")
     private Boolean register;
@@ -106,6 +106,15 @@ public class UserServiceImp extends ServiceImpl<UserMapper, User> implements Use
         return this.update(new LambdaUpdateWrapper<User>()
                 .set(BaseEntity::getState, 0)
                 .eq(BaseEntity::getId, id));
+    }
+
+    @Override
+    public UserVo search(String keyword) {
+        Wrapper<User> wrapper = new LambdaQueryWrapper<User>()
+                .eq(User::getName,keyword)
+                .or()
+                .eq(User::getEmail,keyword);
+        return UserWrapper.build().entityVO(this.getOne(wrapper, false));
     }
 
     /**

@@ -15,7 +15,7 @@ public interface UserService extends IService<User> {
     /**
      * 注册
      *
-     * @param userDto 用户对象
+     * @param userDto 用户传输类
      * @param request 请求
      * @return 用户信息 & token
      */
@@ -24,7 +24,7 @@ public interface UserService extends IService<User> {
     /**
      * 编辑信息
      *
-     * @param userDto 用户对象
+     * @param userDto 用户传输类
      * @param token   token
      * @return 是否成功
      */
@@ -33,7 +33,7 @@ public interface UserService extends IService<User> {
     /**
      * 登录
      *
-     * @param userDto 用户对象
+     * @param userDto 用户传输类
      * @return 用户信息 & token
      */
     Map<String, Object> login(UserDto userDto);
@@ -61,4 +61,11 @@ public interface UserService extends IService<User> {
      * @return 是否成功
      */
     boolean close(Long id);
+
+    /**
+     * 搜索
+     * @param keyword 关键词
+     * @return 用户视图类
+     */
+    UserVo search(String keyword);
 }

@@ -63,4 +63,18 @@ public class UserController {
     public IPage<UserVo> selectByList(Query query) {
         return userService.selectByList(query);
     }
+
+    @Admin
+    @DeleteMapping(value = "/{id}")
+    @ApiOperation(value = "关闭用户")
+    public Boolean close(@PathVariable Long id) {
+        return userService.close(id);
+    }
+
+    @Admin
+    @GetMapping(value = "/search/{keyword}")
+    @ApiOperation(value = "搜索")
+    public UserVo search(@PathVariable String keyword) {
+        return userService.search(keyword);
+    }
 }
