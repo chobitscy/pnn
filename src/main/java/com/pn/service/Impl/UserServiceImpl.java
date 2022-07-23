@@ -16,7 +16,7 @@ import com.pn.service.UserService;
 import com.pn.support.exception.BaseException;
 import com.pn.support.Condition;
 import com.pn.support.Query;
-import com.pn.utils.JwtUtils;
+import com.pn.utils.JwtUtil;
 import com.pn.utils.NetUtil;
 import com.pn.vo.UserVo;
 import com.pn.wrapper.UserWrapper;
@@ -57,7 +57,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public boolean edit(UserDto userDto, String token) {
         String name = userDto.getName();
         String avatar = userDto.getAvatar();
-        Long id = JwtUtils.getUserId(token);
+        Long id = JwtUtil.getUserId(token);
         UpdateWrapper<User> wrapper = new UpdateWrapper<User>()
                 .set(name != null, "name", name)
                 .set(avatar != null, "avatar", avatar)
@@ -124,7 +124,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return 用户信息 & token
      */
     private Map<String, Object> buildUserInfo(UserDto userDto) {
-        String token = JwtUtils.createToken(userDto, userDto.getExpire());
+        String token = JwtUtil.createToken(userDto, userDto.getExpire());
         Map<String, Object> map = new HashMap<>();
         map.put("user", new UserWrapper().entityVO(userDto));
         map.put("token", token);

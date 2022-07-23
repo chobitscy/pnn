@@ -6,7 +6,7 @@ import com.pn.annotation.PassToken;
 import com.pn.enums.ResponseCode;
 import com.pn.support.exception.BaseException;
 import com.pn.support.exception.ClientException;
-import com.pn.utils.JwtUtils;
+import com.pn.utils.JwtUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.method.HandlerMethod;
@@ -45,15 +45,15 @@ public class Authentication implements HandlerInterceptor {
             if (token == null) {
                 throw new ClientException(ResponseCode.SERVICE_ERROR, "无token,请重新登陆");
             }
-            JwtUtils.parseJWT(token);
+            JwtUtil.parseJWT(token);
         } else if (method.isAnnotationPresent(Admin.class)) {
             if (token == null) {
                 throw new ClientException(ResponseCode.SERVICE_ERROR, "无token,请重新登陆");
             }
-            if (!JwtUtils.is_admin(token)) {
+            if (!JwtUtil.is_admin(token)) {
                 throw new BaseException(ResponseCode.SERVICE_ERROR, "权限不够");
             }
-            JwtUtils.parseJWT(token);
+            JwtUtil.parseJWT(token);
         }
         String timestamp_str = request.getHeader("timestamp");
         long timestamp = timestamp_str == null ? 0 : Long.parseLong(timestamp_str);

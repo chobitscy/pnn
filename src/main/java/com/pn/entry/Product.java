@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- *
+ * 制作人实体类
  **/
 @EqualsAndHashCode(callSuper = true)
 @Data
