@@ -8,6 +8,7 @@ import com.pn.service.VideoService;
 import com.pn.support.Query;
 import com.pn.support.validate.AddValidationGroup;
 import com.pn.support.validate.EditValidationGroup;
+import com.pn.utils.UserUtil;
 import com.pn.vo.VideoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -76,5 +78,12 @@ public class VideoController {
     @ApiOperation("推荐")
     public IPage<VideoVo> recommend(Query query, @PathVariable Long id) {
         return videoService.recommend(query, id);
+    }
+
+    @LoginUser
+    @GetMapping("/follow")
+    @ApiOperation("关注")
+    public IPage<VideoVo> follow(Query query, HttpServletRequest request) {
+        return videoService.follow(query, UserUtil.getUserIdByRequest(request));
     }
 }

@@ -67,4 +67,13 @@ public interface VideoService extends IService<Video> {
      * @return 分页结果
      */
     IPage<VideoVo> recommend(Query query, Long id);
+
+    /**
+     * 当前用户关注制作人的作品
+     *
+     * @param query  分页参数
+     * @param userId 用户 id
+     * @return 分页结果
+     */
+    IPage<VideoVo> follow(Query query, Long userId);
 }

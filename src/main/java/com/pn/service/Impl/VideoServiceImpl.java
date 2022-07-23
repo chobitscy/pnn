@@ -8,9 +8,11 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pn.dto.VideoDto;
+import com.pn.entry.Follow;
 import com.pn.entry.Video;
 import com.pn.enums.ResponseCode;
 import com.pn.mapper.VideoMapper;
+import com.pn.service.FollowService;
 import com.pn.service.ServicePlus;
 import com.pn.service.VideoService;
 import com.pn.support.Condition;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 视频服务实现类
@@ -32,6 +35,8 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements VideoService, ServicePlus<Video> {
+
+    private FollowService followService;
 
     @Override
     @Cacheable(value = "video", keyGenerator = "md5KeyGenerator")
@@ -101,5 +106,19 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         VideoVo target = this.detail(id);
         String exp = target.getTid().replace(",", "|");
         return this.baseMapper.recommend(page, id, target.getPid(), exp);
+    }
+
+    @Override
+    @Cacheable(value = "video", keyGenerator = "md5KeyGenerator")
+    public IPage<VideoVo> follow(Query query, Long userId) {
+        List<Long> followProductList = followService.list(new LambdaQueryWrapper<Follow>()
+                .eq(Follow::getUid, userId))
+                .stream()
+                .map(Follow::getPid)
+                .collect(Collectors.toList());
+        Wrapper<Video> wrapper = new LambdaQueryWrapper<Video>()
+                .in(Video::getPid, followProductList)
+                .orderByDesc(Video::getCreateDate);
+        return this.baseMapper.selectByPage(Condition.getPage(query), wrapper);
     }
 }
