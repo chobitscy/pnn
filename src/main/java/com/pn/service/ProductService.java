@@ -1,12 +1,12 @@
 package com.pn.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.pn.entry.Product;
 import com.pn.support.Query;
 import com.pn.vo.ProductVo;
 
-import javax.servlet.http.HttpServletRequest;
-
-public interface ProductService {
+public interface ProductService extends IService<Product> {
 
     /**
      * 分页
@@ -32,24 +32,4 @@ public interface ProductService {
      * @return 搜索结果
      */
     IPage<ProductVo> search(Query query, String keyword);
-
-    /**
-     * 关注
-     *
-     * @param id      制作人 id
-     * @param request 请求
-     * @return 是否成功
-     */
-    Boolean follow(Long id, HttpServletRequest request);
-
-    /**
-     * 取关
-     *
-     * @param id      制作人 id
-     * @param request 请求
-     * @return 是否成功
-     */
-    Boolean unFollow(Long id, HttpServletRequest request);
-
-
 }

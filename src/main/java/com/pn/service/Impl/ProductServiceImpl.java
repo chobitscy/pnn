@@ -47,17 +47,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return ProductWrapper.build().pageVO(this.page(Condition.getPage(query), wrapper));
     }
 
-    @Override
-    public Boolean follow(Long id, HttpServletRequest request) {
-        Long userId = UserUtil.getUserIdByRequest(request);
-        return null;
-    }
-
-    @Override
-    public Boolean unFollow(Long id, HttpServletRequest request) {
-        return null;
-    }
-
     /**
      * 构建按 fans 倒序的 wrapper
      *

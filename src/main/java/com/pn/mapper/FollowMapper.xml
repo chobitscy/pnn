@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pn.mapper.FollowMapper">
+
+    <resultMap id="videoToProduct" type="com.pn.vo.FollowVo">
+        <result column="product_id" property="product.id"/>
+        <result column="name" property="product.name"/>
+        <result column="home" property="product.home"/>
+        <result column="avatar" property="product.avatar"/>
+        <result column="works" property="product.works"/>
+        <result column="fans" property="product.fans"/>
+        <result column="follow" property="product.follow"/>
+        <result column="product_create_time" property="product.createTime"/>
+        <result column="product_update_time" property="product.updateTime"/>
+        <result column="product_state" property="product.state"/>
+    </resultMap>
+
+    <select id="selectByPage" resultMap="videoToProduct">
+        SELECT
+            a.*,
+            b.id AS product_id,
+            b.name AS 'name',
+            b.home AS home,
+            b.avatar AS avatar,
+            b.works AS works,
+            b.fans AS fans,
+            b.follow AS follow,
+            b.create_time AS product_create_time,
+            b.update_time AS product_update_time,
+            b.state AS product_state
+        FROM
+            follow AS a
+            LEFT JOIN product AS b ON a.pid = b.id
+        WHERE
+            a.uid = #{uid}
+    </select>
+
+</mapper>

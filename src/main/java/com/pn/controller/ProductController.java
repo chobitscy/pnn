@@ -38,9 +38,9 @@ public class ProductController {
     }
 
     @LoginUser
-    @GetMapping("/search")
+    @GetMapping("/search/{keyword}")
     @ApiOperation("搜索")
-    public IPage<ProductVo> search(Query query, @RequestParam String keyword) {
+    public IPage<ProductVo> search(Query query, @PathVariable String keyword) {
         return productService.search(query, keyword);
     }
 }
