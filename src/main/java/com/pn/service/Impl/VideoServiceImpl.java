@@ -18,7 +18,9 @@ import com.pn.support.Query;
 import com.pn.support.exception.BaseException;
 import com.pn.vo.VideoVo;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -32,6 +34,7 @@ import java.util.*;
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements VideoService, ServicePlus<Video> {
 
     @Override
+    @Cacheable(value = "popular", keyGenerator = "md5KeyGenerator")
     public IPage<VideoVo> popular(Query query, Integer day) {
         Date now = new Date();
         Date begin = DateUtil.offsetDay(now, -day);
@@ -44,6 +47,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     }
 
     @Override
+    @Cacheable(value = "selectByPage", keyGenerator = "md5KeyGenerator")
     public IPage<VideoVo> selectByPage(Query query) {
         IPage<Video> page = Condition.getPage(query);
         return this.baseMapper.selectByPage(page, new LambdaQueryWrapper<Video>()
@@ -51,6 +55,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     }
 
     @Override
+    @Cacheable(value = "search", keyGenerator = "md5KeyGenerator")
     public IPage<VideoVo> search(Query query, String vid) {
         IPage<Video> page = Condition.getPage(query);
         return this.baseMapper.selectByPage(page, new LambdaQueryWrapper<Video>()
@@ -59,6 +64,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     }
 
     @Override
+    @Cacheable(value = "detail", keyGenerator = "md5KeyGenerator")
     public VideoVo detail(Long id) {
         List<VideoVo> videoVoList = this.baseMapper.selectByOne(new QueryWrapper<Video>()
                 .eq(id != null, "a.id", id));
@@ -68,6 +74,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
                 .get(0);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean mark(VideoDto videoDto) {
         return this.updatePlus(new UpdateWrapper<Video>()
@@ -75,6 +82,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
                 .eq("id", videoDto.getId()));
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean score(VideoDto videoDto) {
         VideoVo target = this.detail(videoDto.getId());
@@ -87,6 +95,7 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     }
 
     @Override
+    @Cacheable(value = "recommend", keyGenerator = "md5KeyGenerator")
     public IPage<VideoVo> recommend(Query query, Long id) {
         IPage<Video> page = Condition.getPage(query);
         VideoVo target = this.detail(id);

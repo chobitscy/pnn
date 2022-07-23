@@ -47,7 +47,7 @@ spring:
   redis:
     host: ${redisHost}
     port: 6379
-    password: ${redisPassword}
+    password: ${redisPasswd}
     # 连接超时时间（ms）
     timeout: 1000
     # Redis默认情况下有16个分片，这里配置具体使用的分片，默认是0
