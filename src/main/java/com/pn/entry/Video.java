@@ -87,4 +87,7 @@ public class Video extends BaseEntity {
     @ApiModelProperty(value = "是否审查")
     @NotNull(message = "审查不存在", groups = {AddValidationGroup.class})
     private Boolean uncensored;
+
+    @ApiModelProperty(value = "nyaa id")
+    private String cid;
 }

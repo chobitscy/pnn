@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pn.mapper.StarMapper">
+
+    <resultMap id="full" type="com.pn.vo.StarVo">
+        <result column="video_id" property="video.id"/>
+        <result column="video_vid" property="video.vid"/>
+        <result column="title" property="video.title"/>
+        <result column="create_date" property="video.createDate"/>
+        <result column="pub_date" property="video.pubDate"/>
+        <result column="info_hash" property="video.infoHash"/>
+        <result column="size" property="video.size"/>
+        <result column="speeders" property="video.speeders"/>
+        <result column="downloads" property="video.downloads"/>
+        <result column="completed" property="video.completed"/>
+        <result column="rate" property="video.rate"/>
+        <result column="screenshot" property="video.screenshot"/>
+        <result column="print_screen" property="video.printScreen"/>
+        <result column="tid" property="video.tid"/>
+        <result column="pid" property="video.pid"/>
+        <result column="comments" property="video.comments"/>
+        <result column="likes" property="video.likes"/>
+        <result column="reply" property="video.reply"/>
+        <result column="uncensored" property="video.uncensored" javaType="java.lang.Boolean"/>
+        <result column="cid" property="video.cid"/>
+        <result column="video_create_time" property="video.createTime"/>
+        <result column="video_update_time" property="video.updateTime"/>
+        <result column="video_state" property="video.state"/>
+        <result column="pid" property="video.product.id"/>
+        <result column="name" property="video.product.name"/>
+        <result column="home" property="video.product.home"/>
+        <result column="avatar" property="video.product.avatar"/>
+        <result column="works" property="video.product.works"/>
+        <result column="fans" property="video.product.fans"/>
+        <result column="follow" property="video.product.follow"/>
+        <result column="product_create_time" property="video.product.createTime"/>
+        <result column="product_update_time" property="video.product.updateTime"/>
+        <result column="product_state" property="video.product.state"/>
+    </resultMap>
+
+    <select id="selectByPage" resultMap="full">
+        SELECT
+            a.*,
+            b.*, b.id AS video_id, b.vid AS video_vid, b.create_time AS video_create_time, b.update_time AS video_update_time, b.state AS video_state,
+            c.*, c.id AS product_id, c.create_time AS product_create_time, c.update_time AS product_update_time, c.state AS product_state
+        FROM
+            star AS a
+            LEFT JOIN video AS b ON a.vid = b.vid
+            LEFT JOIN product AS c ON b.pid = c.id
+        WHERE
+            a.uid = #{userId}
+        ORDER BY
+            a.create_time DESC
+    </select>
+
+</mapper>
