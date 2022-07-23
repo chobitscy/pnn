@@ -11,14 +11,12 @@ import com.pn.service.ProductService;
 import com.pn.support.Condition;
 import com.pn.support.Query;
 import com.pn.support.exception.BaseException;
-import com.pn.utils.UserUtil;
 import com.pn.vo.ProductVo;
 import com.pn.wrapper.ProductWrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Service

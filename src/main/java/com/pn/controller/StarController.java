@@ -9,7 +9,7 @@ import com.pn.utils.UserUtil;
 import com.pn.vo.StarVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/start")
 @Api(value = "收藏管理", tags = "收藏接口")
 @BaseResponse
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class StarController {
 
-    private StarService starService;
+    private final StarService starService;
 
     @LoginUser
     @GetMapping("/page")

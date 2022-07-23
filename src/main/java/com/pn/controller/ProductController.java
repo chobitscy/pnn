@@ -8,7 +8,7 @@ import com.pn.support.Query;
 import com.pn.vo.ProductVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/product")
 @Api(value = "制作人管理", tags = "制作人接口")
 @BaseResponse
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductController {
 
-    private ProductService productService;
+    private final ProductService productService;
 
     @LoginUser
     @GetMapping("/page")

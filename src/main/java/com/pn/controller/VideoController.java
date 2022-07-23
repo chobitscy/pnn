@@ -12,7 +12,7 @@ import com.pn.utils.UserUtil;
 import com.pn.vo.VideoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,10 +26,10 @@ import javax.validation.constraints.NotNull;
 @RequestMapping("/video")
 @Api(value = "视频管理", tags = "视频接口")
 @BaseResponse
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class VideoController {
 
-    private VideoService videoService;
+    private final VideoService videoService;
 
     @LoginUser
     @GetMapping("/popular/{day}")

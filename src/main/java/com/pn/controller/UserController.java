@@ -11,7 +11,7 @@ import com.pn.support.validate.ExpireValidationGroup;
 import com.pn.vo.UserVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/user")
 @Api(value = "用户管理", tags = "用户接口")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @BaseResponse
 public class UserController {
 

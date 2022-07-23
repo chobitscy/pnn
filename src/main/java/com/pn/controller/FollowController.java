@@ -9,7 +9,7 @@ import com.pn.utils.UserUtil;
 import com.pn.vo.FollowVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/follow")
 @Api(value = "关注管理", tags = "关注接口")
 @BaseResponse
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FollowController {
 
-    private FollowService followService;
+    private final FollowService followService;
 
     @LoginUser
     @PostMapping("/follow")

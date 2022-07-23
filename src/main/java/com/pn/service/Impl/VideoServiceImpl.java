@@ -19,7 +19,7 @@ import com.pn.support.Condition;
 import com.pn.support.Query;
 import com.pn.support.exception.BaseException;
 import com.pn.vo.VideoVo;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,10 +33,10 @@ import java.util.stream.Collectors;
  * 视频服务实现类
  **/
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements VideoService, ServicePlus<Video> {
 
-    private FollowService followService;
+    private final FollowService followService;
 
     @Override
     @Cacheable(value = "video", keyGenerator = "md5KeyGenerator")
