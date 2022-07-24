@@ -14,4 +14,9 @@ public class UserUtil {
         String token = request.getHeader("Authorization");
         return JwtUtil.getUserId(token);
     }
+
+    public static String getUserNameByRequest(HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        return JwtUtil.getUserName(token);
+    }
 }
