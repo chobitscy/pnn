@@ -19,7 +19,7 @@ public class ReplyServiceImpl implements ReplyService {
     private final ReplyRepository replyRepository;
 
     @Override
-    public void add(Reply reply, Long userId, String name) {
+    public void push(Reply reply, Long userId, String name) {
         Reply temp = new Reply()
                 .setContent(reply.getContent())
                 .setDate(new Date())

@@ -15,6 +15,7 @@
         <result column="completed" property="video.completed"/>
         <result column="rate" property="video.rate"/>
         <result column="screenshot" property="video.screenshot"/>
+        <result column="thumb" property="video.thumb"/>
         <result column="print_screen" property="video.printScreen"/>
         <result column="tid" property="video.tid"/>
         <result column="pid" property="video.pid"/>

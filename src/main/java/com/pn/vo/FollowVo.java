@@ -1,5 +1,7 @@
 package com.pn.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.pn.entry.Follow;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -14,8 +16,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"id", "pid", "uid", "createTime", "updateTime", "state"})
 public class FollowVo extends Follow {
 
-    @ApiModelProperty(value = "制作人")
-    private ProductVo product;
+    @JsonUnwrapped
+    @ApiModelProperty(value = "视频")
+    private VideoVo video;
 }

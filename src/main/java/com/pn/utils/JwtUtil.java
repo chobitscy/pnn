@@ -26,7 +26,7 @@ public class JwtUtil {
      * 获取Token
      *
      * @param user 用户
-     * @param Exp  过期时间（单位：分）
+     * @param Exp  过期时间（单位：天）
      * @return String
      */
     public static String createToken(User user, int Exp) {
@@ -52,7 +52,7 @@ public class JwtUtil {
                     .signWith(signatureAlgorithm, signingKey);
 
             // 添加token过期时间
-            long TTLMillis = Exp * 60 * 1000;
+            long TTLMillis = Exp * 60 * 1000 * 60 * 24;
             if (TTLMillis >= 0) {
                 long expMillis = nowMillis + TTLMillis;
                 Date exp = new Date(expMillis);

@@ -1,9 +1,12 @@
 package com.pn.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.pn.annotation.BaseResponse;
 import com.pn.annotation.LoginUser;
 import com.pn.dto.VideoDto;
+import com.pn.entry.Video;
 import com.pn.service.VideoService;
 import com.pn.support.Query;
 import com.pn.support.validate.AddValidationGroup;
@@ -42,7 +45,8 @@ public class VideoController {
     @GetMapping("/page")
     @ApiOperation("分页")
     public IPage<VideoVo> selectByPage(Query query) {
-        return videoService.selectByPage(query);
+        return videoService.selectByPage(query, new QueryWrapper<Video>()
+                .orderByDesc("a.create_date"));
     }
 
     @LoginUser
@@ -85,5 +89,14 @@ public class VideoController {
     @ApiOperation("关注")
     public IPage<VideoVo> follow(Query query, HttpServletRequest request) {
         return videoService.follow(query, UserUtil.getUserIdByRequest(request));
+    }
+
+    @LoginUser
+    @GetMapping("/product/{productId}")
+    @ApiOperation("指定制作人作品分页")
+    public IPage<VideoVo> selectByProduct(Query query, @PathVariable Long productId) {
+        return videoService.selectByPage(query, new QueryWrapper<Video>()
+                .eq("a.pid", productId)
+                .orderByDesc("a.rate"));
     }
 }

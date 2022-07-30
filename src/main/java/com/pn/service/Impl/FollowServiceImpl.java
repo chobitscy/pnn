@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.pn.entry.Follow;
+import com.pn.enums.ResponseCode;
 import com.pn.mapper.FollowMapper;
 import com.pn.service.FollowService;
 import com.pn.service.ServicePlus;
 import com.pn.support.Condition;
 import com.pn.support.Query;
+import com.pn.support.exception.BaseException;
 import com.pn.vo.FollowVo;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,6 +25,12 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean follow(Long pid, Long userId) {
+        Wrapper<Follow> wrapper = new LambdaQueryWrapper<Follow>()
+                .eq(Follow::getPid, pid)
+                .eq(Follow::getUid, userId);
+        if (this.getOne(wrapper, false) != null) {
+            throw new BaseException(ResponseCode.SERVICE_ERROR, "已关注");
+        }
         return this.savePlus(new Follow().setUid(userId).setPid(pid));
     }
 
@@ -36,7 +44,6 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
     }
 
     @Override
-    @Cacheable(value = "follow", keyGenerator = "md5KeyGenerator")
     public IPage<FollowVo> selectByPage(Query query, Long userId) {
         return this.baseMapper.selectByPage(Condition.getPage(query), userId);
     }

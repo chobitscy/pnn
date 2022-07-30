@@ -24,15 +24,16 @@ public interface StarService extends IService<Star> {
      * @param userId 用户 id
      * @return 是否成功
      */
-    Boolean start(Long vid, Long userId);
+    Boolean add(Long vid, Long userId);
 
     /**
      * 取消收藏
      *
-     * @param id 收藏 id
+     * @param vid    收藏 id
+     * @param userId 用户 id
      * @return 是否成功
      */
-    Boolean unStart(Long id);
+    Boolean unStart(Long vid, Long userId);
 
     /**
      * 检查

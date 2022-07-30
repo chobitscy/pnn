@@ -27,16 +27,16 @@ public class FollowController {
     private final FollowService followService;
 
     @LoginUser
-    @PostMapping("/follow")
+    @PostMapping("/{pid}")
     @ApiOperation("关注")
-    public Boolean follow(Long pid, HttpServletRequest request) {
+    public Boolean follow(@PathVariable Long pid, HttpServletRequest request) {
         return followService.follow(pid, UserUtil.getUserIdByRequest(request));
     }
 
     @LoginUser
-    @PostMapping("/unFollow")
+    @DeleteMapping("/{pid}")
     @ApiOperation("取关")
-    public Boolean unFollow(Long pid, HttpServletRequest request) {
+    public Boolean unFollow(@PathVariable Long pid, HttpServletRequest request) {
         return followService.unFollow(pid, UserUtil.getUserIdByRequest(request));
     }
 

@@ -44,28 +44,27 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         Date now = new Date();
         Date begin = DateUtil.offsetDay(now, -day);
         IPage<Video> page = Condition.getPage(query);
-        Wrapper<Video> wrapper = new LambdaQueryWrapper<Video>()
-                .isNotNull(Video::getCreateDate)
-                .between(Video::getPubDate, begin, now)
-                .orderByDesc(Video::getRate);
+        Wrapper<Video> wrapper = new QueryWrapper<Video>()
+                .isNotNull("a.create_date")
+                .between("a.pub_date", begin, now)
+                .orderByDesc("a.rate");
         return this.baseMapper.selectByPage(page, wrapper);
     }
 
     @Override
     @Cacheable(value = "video", keyGenerator = "md5KeyGenerator")
-    public IPage<VideoVo> selectByPage(Query query) {
+    public IPage<VideoVo> selectByPage(Query query, Wrapper<Video> wrapper) {
         IPage<Video> page = Condition.getPage(query);
-        return this.baseMapper.selectByPage(page, new LambdaQueryWrapper<Video>()
-                .orderByDesc(Video::getRate));
+        return this.baseMapper.selectByPage(page, wrapper);
     }
 
     @Override
     @Cacheable(value = "video", keyGenerator = "md5KeyGenerator")
     public IPage<VideoVo> search(Query query, String vid) {
         IPage<Video> page = Condition.getPage(query);
-        return this.baseMapper.selectByPage(page, new LambdaQueryWrapper<Video>()
-                .like(vid != null, Video::getVid, vid)
-                .orderByDesc(Video::getRate));
+        return this.baseMapper.selectByPage(page, new QueryWrapper<Video>()
+                .like(vid != null, "a.vid", vid)
+                .orderByDesc("a.rate"));
     }
 
     @Override
@@ -109,16 +108,16 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     }
 
     @Override
-    @Cacheable(value = "video", keyGenerator = "md5KeyGenerator")
     public IPage<VideoVo> follow(Query query, Long userId) {
         List<Long> followProductList = followService.list(new LambdaQueryWrapper<Follow>()
                 .eq(Follow::getUid, userId))
                 .stream()
                 .map(Follow::getPid)
+                .distinct()
                 .collect(Collectors.toList());
-        Wrapper<Video> wrapper = new LambdaQueryWrapper<Video>()
-                .in(Video::getPid, followProductList)
-                .orderByDesc(Video::getCreateDate);
+        Wrapper<Video> wrapper = new QueryWrapper<Video>()
+                .in("a.pid", followProductList)
+                .orderByDesc("a.create_date");
         return this.baseMapper.selectByPage(Condition.getPage(query), wrapper);
     }
 }

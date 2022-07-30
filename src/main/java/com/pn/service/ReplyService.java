@@ -14,7 +14,7 @@ public interface ReplyService {
      * @param name   用户名
      * @return 是否成功
      */
-    void add(Reply reply, Long userId, String name);
+    void push(Reply reply, Long userId, String name);
 
     /**
      * 删除回复

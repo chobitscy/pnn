@@ -31,7 +31,7 @@ public class ProductController {
     }
 
     @LoginUser
-    @GetMapping("/detail/{id}")
+    @GetMapping("/{id}")
     @ApiOperation("详情")
     public ProductVo detail(@PathVariable Long id) {
         return productService.detail(id);

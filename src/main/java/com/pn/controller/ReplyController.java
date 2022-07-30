@@ -27,15 +27,15 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @LoginUser
-    @PostMapping("/add")
+    @PostMapping("/push")
     @ApiOperation("添加")
-    public Boolean add(@RequestBody Reply reply, HttpServletRequest request) {
-        replyService.add(reply, UserUtil.getUserIdByRequest(request), UserUtil.getUserNameByRequest(request));
+    public Boolean push(@RequestBody Reply reply, HttpServletRequest request) {
+        replyService.push(reply, UserUtil.getUserIdByRequest(request), UserUtil.getUserNameByRequest(request));
         return true;
     }
 
     @LoginUser
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @ApiOperation("删除")
     public Boolean delete(@PathVariable String id) {
         replyService.delete(id);

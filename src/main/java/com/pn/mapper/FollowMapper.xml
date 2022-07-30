@@ -3,36 +3,52 @@
 <mapper namespace="com.pn.mapper.FollowMapper">
 
     <resultMap id="videoToProduct" type="com.pn.vo.FollowVo">
-        <result column="product_id" property="product.id"/>
-        <result column="name" property="product.name"/>
-        <result column="home" property="product.home"/>
-        <result column="avatar" property="product.avatar"/>
-        <result column="works" property="product.works"/>
-        <result column="fans" property="product.fans"/>
-        <result column="follow" property="product.follow"/>
-        <result column="product_create_time" property="product.createTime"/>
-        <result column="product_update_time" property="product.updateTime"/>
-        <result column="product_state" property="product.state"/>
+        <result column="video_id" property="video.id"/>
+        <result column="video_vid" property="video.vid"/>
+        <result column="title" property="video.title"/>
+        <result column="create_date" property="video.createDate"/>
+        <result column="pub_date" property="video.pubDate"/>
+        <result column="info_hash" property="video.infoHash"/>
+        <result column="size" property="video.size"/>
+        <result column="speeders" property="video.speeders"/>
+        <result column="downloads" property="video.downloads"/>
+        <result column="completed" property="video.completed"/>
+        <result column="rate" property="video.rate"/>
+        <result column="screenshot" property="video.screenshot"/>
+        <result column="thumb" property="video.thumb"/>
+        <result column="print_screen" property="video.printScreen"/>
+        <result column="tid" property="video.tid"/>
+        <result column="pid" property="video.pid"/>
+        <result column="comments" property="video.comments"/>
+        <result column="likes" property="video.likes"/>
+        <result column="reply" property="video.reply"/>
+        <result column="uncensored" property="video.uncensored" javaType="java.lang.Boolean"/>
+        <result column="cid" property="video.cid"/>
+        <result column="video_create_time" property="video.createTime"/>
+        <result column="video_update_time" property="video.updateTime"/>
+        <result column="video_state" property="video.state"/>
+        <result column="product_id" property="video.product.id"/>
+        <result column="name" property="video.product.name"/>
+        <result column="home" property="video.product.home"/>
+        <result column="avatar" property="video.product.avatar"/>
+        <result column="works" property="video.product.works"/>
+        <result column="fans" property="video.product.fans"/>
+        <result column="follow" property="video.product.follow"/>
+        <result column="product_create_time" property="video.product.createTime"/>
+        <result column="product_update_time" property="video.product.updateTime"/>
+        <result column="product_state" property="video.product.state"/>
     </resultMap>
 
     <select id="selectByPage" resultMap="videoToProduct">
         SELECT
             a.*,
-            b.id AS product_id,
-            b.name AS 'name',
-            b.home AS home,
-            b.avatar AS avatar,
-            b.works AS works,
-            b.fans AS fans,
-            b.follow AS follow,
-            b.create_time AS product_create_time,
-            b.update_time AS product_update_time,
-            b.state AS product_state
+            b.*, b.id AS video_id, b.vid AS video_vid, b.create_time AS video_create_time, b.update_time AS video_update_time, b.state AS video_state,
+            c.*, c.id AS product_id,c.create_time AS product_create_time,c.update_time AS product_update_time,c.state AS product_state
         FROM
             follow AS a
-            LEFT JOIN product AS b ON a.pid = b.id
-        WHERE
-            a.uid = #{uid}
+            LEFT JOIN video AS b ON a.pid = b.pid
+            LEFT JOIN product AS c ON b.pid = c.id
+        ORDER BY
+            b.create_date DESC
     </select>
-
 </mapper>

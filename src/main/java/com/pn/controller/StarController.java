@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  * 收藏接口控制器
  **/
 @RestController
-@RequestMapping("/start")
+@RequestMapping("/star")
 @Api(value = "收藏管理", tags = "收藏接口")
 @BaseResponse
 @RequiredArgsConstructor
@@ -34,23 +34,23 @@ public class StarController {
     }
 
     @LoginUser
-    @PostMapping("/start")
+    @PostMapping("/add/{vid}")
     @ApiOperation("收藏")
-    public Boolean start(Long vid, HttpServletRequest request) {
-        return starService.start(vid, UserUtil.getUserIdByRequest(request));
+    public Boolean add(@PathVariable Long vid, HttpServletRequest request) {
+        return starService.add(vid, UserUtil.getUserIdByRequest(request));
     }
 
     @LoginUser
-    @DeleteMapping("/unStart/{id}")
+    @DeleteMapping("/{vid}")
     @ApiOperation("取消收藏")
-    public Boolean unStart(@PathVariable Long id) {
-        return starService.unStart(id);
+    public Boolean unStart(@PathVariable Long vid, HttpServletRequest request) {
+        return starService.unStart(vid, UserUtil.getUserIdByRequest(request));
     }
 
     @LoginUser
-    @GetMapping("/check")
+    @GetMapping("/check/{vid}")
     @ApiOperation("检查")
-    public Boolean check(Long vid, HttpServletRequest request) {
+    public Boolean check(@PathVariable Long vid, HttpServletRequest request) {
         return starService.check(vid, UserUtil.getUserIdByRequest(request));
     }
 }

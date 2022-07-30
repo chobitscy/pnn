@@ -1,5 +1,6 @@
 package com.pn.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.pn.dto.VideoDto;
@@ -21,10 +22,11 @@ public interface VideoService extends IService<Video> {
     /**
      * 分页
      *
-     * @param query 分页参数
+     * @param query   分页参数
+     * @param wrapper 条件
      * @return 分页结果
      */
-    IPage<VideoVo> selectByPage(Query query);
+    IPage<VideoVo> selectByPage(Query query, Wrapper<Video> wrapper);
 
     /**
      * 搜索
