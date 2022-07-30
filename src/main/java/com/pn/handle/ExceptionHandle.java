@@ -28,6 +28,7 @@ public class ExceptionHandle {
      * @return 统一响应体
      */
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseResult handleException(Exception e) {
         log.error(e.getMessage(), e);
         return new ResponseResult(ResponseCode.SERVICE_ERROR.getCode(), ResponseCode.SERVICE_ERROR.getMsg(), null);
@@ -40,6 +41,7 @@ public class ExceptionHandle {
      * @return 统一响应体
      */
     @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseResult handleRuntimeException(RuntimeException e) {
         log.error(e.getMessage(), e);
         return new ResponseResult(ResponseCode.SERVICE_ERROR.getCode(), ResponseCode.SERVICE_ERROR.getMsg(), null);
@@ -65,6 +67,7 @@ public class ExceptionHandle {
      * @return 统一响应体
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseResult handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
         return new ResponseResult(ResponseCode.SERVICE_ERROR.getCode(),
@@ -77,6 +80,7 @@ public class ExceptionHandle {
      * @return 统一响应体
      */
     @ExceptionHandler(DuplicateKeyException.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseResult handleDuplicateKeyException(DuplicateKeyException e) {
         log.error(e.getMessage(), e);
         return new ResponseResult(ResponseCode.SERVICE_ERROR.getCode(), "数据已经存在", null);

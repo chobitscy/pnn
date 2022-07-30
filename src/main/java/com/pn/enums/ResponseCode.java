@@ -15,7 +15,7 @@ public enum ResponseCode {
     /**
      * 所有无法识别的异常默认的返回状态码
      */
-    SERVICE_ERROR(0, "fail");
+    SERVICE_ERROR(0, "system error");
     /**
      * 状态码
      */
